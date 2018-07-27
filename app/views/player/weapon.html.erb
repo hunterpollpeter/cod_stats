@@ -1,0 +1,7 @@
+<% weapon_data = @player.weapon @weapon %>
+
+<%= render 'player/header.html.erb' %>
+
+<% weapon_data.each do |stat, value| %>
+  <%= stat %>: <%= value %><br>
+<% end %>

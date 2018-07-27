@@ -1,0 +1,7 @@
+<ul>
+  <% @results.each do |player| %>
+    <li>
+      <%= link_to "#{player.platform} #{player.username}", player_path(player) %>
+    </li>
+  <% end if @results %>
+</ul>

@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-player shadow-sm">
+  <div class="container">
+    <div class="player">
+      <div class="level text-center">
+        <%= image_tag level_image(@player), class: 'level-img' %>
+        <small class="text-muted">Level <%= @player.level %></small>
+      </div>
+      <div class="username">
+<!--        <span class="badge badge-<%#= @player.platform %>"> <%#= friendly_platform @player.platform %></span>-->
+        <%= link_to player_path @player do %>
+          <h4><%= @player.username %></h4>
+        <% end %>
+      </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#player_navbar" aria-controls="player_navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="player_navbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active"><a class="nav-link" href="#">Modes</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Weapons</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Divisions</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!--<div class="row">-->
+<!--  <div class="col-12">-->
+<!--    <div class="card mb-3">-->
+<!--      <div class="card-body p-0">-->
+<!--        <div class="player-updated">-->
+<!--          <small class="text-muted">-->
+<!--            updated <%#= time_ago_in_words @player.updated_at %> ago-->
+            <%#= link_to '#' do %>
+<!--              <i class="fas fa-sync ml-1"></i>-->
+            <%# end %>
+<!--          </small>-->
+<!--        </div>-->
+<!--        <div class="player-header level">-->
+          <%#= image_tag level_image(@player), class: 'level-img' %>
+<!--          <small class="text-muted">Level <%#= @player.level %></small>-->
+<!--        </div>-->
+<!--        <div class="player-header username">-->
+<!--          <h2><%#= @player.username %></h2>-->
+<!--          <span class="badge badge-<%#= @player.platform %>"> <%#= friendly_platform @player.platform %></span><br>-->
+<!--          <small class="text-muted">last played <%#= time_ago_in_words @player.last_played %> ago</small>-->
+<!--        </div>-->
+<!--        <div class="player-header info">-->
+<!--          <ul>-->
+<!--            <li>-->
+<!--              <small class="text-muted">score</small><br>-->
+<!--              <h4><%#= @player.mode_score %></h4>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <small class="text-muted">k/d ratio</small><br>-->
+<!--              <h4><%#= @player.kd_ratio %></h4>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <small class="text-muted">win %</small><br>-->
+<!--              <h4><%#= number_with_precision(percentage(@player.win_percentage), precision: 1)%></h4>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <small class="text-muted">accuracy</small><br>-->
+<!--              <h4><%#= @player.accuracy %></h4>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

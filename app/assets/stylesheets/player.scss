@@ -1,0 +1,91 @@
+.stat-up:after {
+  font-weight: 900;
+  font-family: "Font Awesome 5 Free";
+  content: "\f062";
+  margin-left: 0.5em;
+  color: $green;
+}
+
+.stat-down:after {
+  font-weight: 900;
+  font-family: "Font Awesome 5 Free";
+  content: "\f063";
+  margin-left: 0.5em;
+  color: $red;
+}
+
+.nav-text {
+  display: block;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0;
+}
+
+.navbar-player {
+  vertical-align: top;
+  .level {
+    display: inline-block;
+    margin-right: 0.5rem;
+    img.level-img {
+      display: block;
+      max-height: 50px;
+    }
+  }
+
+  .username {
+    display: inline-block;
+    .badge {
+      display: inline-block !important;
+      color: white;
+      &:before {
+        font-family: "Font Awesome 5 Brands";
+      }
+
+      &.badge-psn {
+        background-color: #003791;
+        &:before {
+          content: '\f3df';
+        }
+      }
+      &.badge-xbl {
+        background-color: #107c10;
+        &:before {
+          content: '\f412';
+        }
+      }
+      &.badge-steam {
+        background-color: #171A21;
+        &:before {
+          content: '\f1b6';
+        }
+      }
+    }
+  }
+
+  &.info {
+    >ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      >li {
+        display: inline-block;
+        padding: 0 1rem;
+        margin-right: 1.5rem;
+        border-radius: .25rem
+      }
+    }
+  }
+}
+
+.player-updated {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 0.25rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-top-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  border-bottom: none;
+  border-right: none;
+}
+
