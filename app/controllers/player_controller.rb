@@ -3,7 +3,7 @@ class PlayerController < ApplicationController
     @player, update_successful = Player.api_get player_params
     render 'player/error', locals: { error: 'Player not found' } unless @player
     if update_successful
-      flash[:primary] = "Successfully updated #{@player.username}"
+      flash[:success] = "Successfully updated #{@player.username}"
     elsif !update_successful.nil? and !update_successful
       flash[:danger] = 'Unable to update player.'
     end

@@ -128,5 +128,34 @@ table.table-hover tr:hover {
 .alert-main {
   border-radius: 0;
   margin-bottom: 0;
+
+  &.alert-success .container .row .col-12 {
+    &:before {
+      font-weight: 900;
+      font-family: "Font Awesome 5 Free";
+      content: "\f058";
+      margin-right: 0.25rem;
+    }
+  }
+
+  &.alert-primary .container .row .col-12 {
+    &:before {
+      font-weight: 900;
+      font-family: "Font Awesome 5 Free";
+      content: "\f05a";
+      margin-right: 0.25rem;
+    }
+  }
+
+  &.alert-danger .container .row .col-12, &.alert-warning .container .row .col-12 {
+    &:before {
+      font-weight: 900;
+      font-family: "Font Awesome 5 Free";
+      content: "\f06a";
+      margin-right: 0.25rem;
+    }
+  }
+
+
 }
 
