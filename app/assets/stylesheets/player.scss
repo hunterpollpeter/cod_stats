@@ -21,13 +21,24 @@
 }
 
 .navbar-player {
+
+  h4, h5 {
+    margin: 0;
+  }
+
+  .navbar-stat {
+    h5 {
+      color: $black;
+    }
+  }
+
   vertical-align: top;
   .level {
     display: inline-block;
-    margin-right: 0.5rem;
     img.level-img {
       display: block;
-      max-height: 50px;
+      max-height: 40px;
+      margin: 0 auto;
     }
   }
 
@@ -79,13 +90,5 @@
 .player-updated {
   position: absolute;
   right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.03);
-  padding: 0.25rem 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  border-top-left-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-  border-bottom: none;
-  border-right: none;
 }
 

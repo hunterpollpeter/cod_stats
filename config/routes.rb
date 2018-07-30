@@ -9,5 +9,4 @@ Rails.application.routes.draw do
   get 'player/:id/weapon/:weapon' => 'player#weapon', as: 'player_weapon'
 
   resources :player, only: [:show]
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

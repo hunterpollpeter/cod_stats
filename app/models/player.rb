@@ -1,10 +1,11 @@
 class Player < ApplicationRecord
   def self.api_find(platform, gamer_tag, title)
-    player = Player.find_by(username: gamer_tag, platform: platform, title: title)
+    player = Player.find_by(username: gamer_tag, title: title, platform: platform)
     return player if player
     resp = JSON.parse(HTTP.get(api_url(platform, gamer_tag, title)))
     return nil unless resp['status'] == 'success'
-    player = Player.find_or_initialize_by(username: gamer_tag, platform: platform, title: title)
+    # use username from resp!!
+    player = Player.new(username: gamer_tag, platform: platform, title: title)
     player.data = resp['data']
     player.save
     player
@@ -12,18 +13,18 @@ class Player < ApplicationRecord
 
   def self.api_get(id)
     player = Player.find_by(id: id)
-    return nil unless player
-    return player unless player.needs_update?
+    return nil, nil unless player
+    return player, nil unless player.needs_update?
     resp = JSON.parse(HTTP.get(api_url(player.platform, player.username, player.title)))
-    return nil unless resp['status'] == 'success'
+    return player, false unless resp['status'] == 'success'
     player.data = resp['data']
     player.map_weapon_data
     player.save
-    player
+    return player, true
   end
 
   def needs_update?
-    Time.now >= (updated_at + 30.minutes)
+    Time.now >= (updated_at + 5.hours)
   end
 
   def level
@@ -113,7 +114,7 @@ class Player < ApplicationRecord
     scr = score mode, weekly
     tp = time_played mode, weekly
     return nil unless scr && tp
-    spm = scr / (tp / 60)
+    spm = scr / (tp / 60.0)
     spm.nan? ? nil : spm
   end
 
@@ -121,7 +122,7 @@ class Player < ApplicationRecord
     ks = kills mode, weekly
     tp = time_played mode, weekly
     return nil unless ks && tp
-    kpm = ks / (tp / 60)
+    kpm = ks / (tp / 60.0)
     kpm.nan? ? nil : kpm
   end
 
@@ -129,7 +130,7 @@ class Player < ApplicationRecord
     ds = deaths mode, weekly
     tp = time_played mode, weekly
     return nil unless ds && tp
-    dpm = ds / (tp / 60)
+    dpm = ds / (tp / 60.0)
     dpm.nan? ? nil : dpm
   end
 
@@ -177,9 +178,10 @@ class Player < ApplicationRecord
   end
 
   def weapon_type_data(weapon_type)
-    weapons = weapon_data.select { |_, data|
+    weapons = weapon_data&.select { |_, data|
       data['weapon_type'] == weapon_type.to_s
     }
+    return nil unless weapons
     kills = 0
     deaths = 0
     multikills = 0

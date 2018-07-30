@@ -79,10 +79,14 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     crass (1.0.4)
+    debase (0.2.2)
+      debase-ruby_core_source (>= 0.10.2)
+    debase-ruby_core_source (0.10.3)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.7.1)
     execjs (2.7.0)
+    ffi (1.9.25)
     ffi (1.9.25-x64-mingw32)
     font-awesome-sass (5.0.13)
       sassc (>= 1.11)
@@ -119,10 +123,14 @@ GEM
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
+    msgpack (1.2.4)
     msgpack (1.2.4-x64-mingw32)
     multi_json (1.13.1)
+    mysql2 (0.5.2)
     mysql2 (0.5.2-x64-mingw32)
     nio4r (2.3.1)
+    nokogiri (1.8.4)
+      mini_portile2 (~> 2.3.0)
     nokogiri (1.8.4-x64-mingw32)
       mini_portile2 (~> 2.3.0)
     popper_js (1.12.9)
@@ -159,6 +167,8 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    ruby-debug-ide (0.7.0.beta4)
+      rake (>= 0.8.1)
     rubyzip (1.2.1)
     sass (3.5.7)
       sass-listen (~> 4.0.0)
@@ -198,6 +208,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
+    unf_ext (0.0.7.5)
     unf_ext (0.0.7.5-x64-mingw32)
     web-console (3.6.2)
       actionview (>= 5.0)
@@ -211,6 +222,7 @@ GEM
       nokogiri (~> 1.8)
 
 PLATFORMS
+  ruby
   x64-mingw32
 
 DEPENDENCIES
@@ -220,6 +232,7 @@ DEPENDENCIES
   capybara (>= 2.15, < 4.0)
   chromedriver-helper
   coffee-rails (~> 4.2)
+  debase
   font-awesome-sass
   http
   jbuilder (~> 2.5)
@@ -227,6 +240,7 @@ DEPENDENCIES
   mysql2 (>= 0.4.4, < 0.6.0)
   puma (~> 3.11)
   rails (~> 5.2.0)
+  ruby-debug-ide
   sass-rails (~> 5.0)
   selenium-webdriver
   turbolinks (~> 5)
@@ -238,4 +252,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.2
+   1.16.3

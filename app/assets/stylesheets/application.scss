@@ -16,6 +16,17 @@ nav {
   }
 }
 
+.full-width {
+  width: 100vw;
+  position: relative;
+  margin-left: -50vw;
+  left: 50%;
+
+  .nav-item {
+    display: inline-block;
+  }
+}
+
 .tab-pane {
   animation-duration: .25s;
 
@@ -78,7 +89,7 @@ nav {
 }
 
 .dropdown-header {
-  margin-left: -5px;
+  margin-left: -0.5rem;
 }
 
 a[data-target] {
@@ -98,3 +109,24 @@ table.table-hover tr:hover {
     background: blue;
   }
 }
+
+.nav-tabs {
+  padding-top: 1rem;
+  border-top: 1px solid $nav-tabs-border-color;
+  @extend .bg-light;
+}
+
+.nav-tabs, .navbar-player, .alert-main {
+  @extend .inner-top-shadow;
+}
+
+
+.inner-top-shadow {
+  box-shadow: inset 0px 10px 10px -10px rgba(0,0,0,0.1);
+}
+
+.alert-main {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+

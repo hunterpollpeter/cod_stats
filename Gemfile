@@ -53,6 +53,8 @@ end
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 3.3.0'
+  gem 'debase'
+  gem 'ruby-debug-ide'
 end
 
 group :test do

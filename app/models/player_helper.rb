@@ -53,8 +53,8 @@ module PlayerHelper
 
   def friendly_platform(platform)
     case platform
-    when 'psn' then 'PlayStation Network'
-    when 'xbl' then 'Xbox Live'
+    when 'psn' then 'PlayStation'
+    when 'xbl' then 'Xbox'
     when 'steam' then 'Steam'
     end
   end

@@ -31,7 +31,7 @@ $(document).on('turbolinks:load', function() {
     $('.nav-tabs a').on('hidden.bs.tab', function(event) {
         var $target = $(event.target);
         var $relatedTarget = $(event.relatedTarget);
-        var $toggle = $target.parents('.dropdown').find('.nav-select-toggle');
+        var $toggle = $target.parents('.nav-select').find('.nav-select-toggle');
         var title = $relatedTarget.text();
         var target_href = $target.data('target');
         var relatedTarget_href = $relatedTarget.data('target');
@@ -40,14 +40,13 @@ $(document).on('turbolinks:load', function() {
         var $container = $relatedTarget_div.parents('.tab-content');
         var prev_i = $(target_href).index();
         var curr_i = $(relatedTarget_href).index();
-        var from =  prev_i < curr_i ? 'right' : 'left';
-        var to =    prev_i < curr_i ? 'left' : 'right';
-
+        var from = prev_i < curr_i ? 'right' : 'left';
+        var to = prev_i < curr_i ? 'left' : 'right';
         if(prev_i < 0) {
             prev_i = 0;
             $target_div = $relatedTarget_div.siblings(prev_i);
         }
-
+        $target.removeClass('active');
         $container.height($relatedTarget_div.height());
         $toggle.html(title);
         $toggle.data('target', relatedTarget_href);

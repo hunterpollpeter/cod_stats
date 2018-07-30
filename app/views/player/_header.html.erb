@@ -1,32 +1,49 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-player shadow-sm">
+<% stats = {
+    'score': @player.mode_score,
+    'k/d ratio': @player.kd_ratio,
+    'win%': number_with_precision(percentage(@player.win_percentage), precision: 1),
+    'accuracy': @player.accuracy,
+    # 'last played': time_ago_in_words(@player.last_played)
+} %>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-player">
   <div class="container">
-    <div class="player">
-      <div class="level text-center">
-        <%= image_tag level_image(@player), class: 'level-img' %>
-        <small class="text-muted">Level <%= @player.level %></small>
-      </div>
-      <div class="username">
-<!--        <span class="badge badge-<%#= @player.platform %>"> <%#= friendly_platform @player.platform %></span>-->
-        <%= link_to player_path @player do %>
+    <%= link_to player_path @player do %>
+      <div class="player navbar-brand mr-0 mr-md-3">
+        <div class="level text-center align-middle mr-2">
+          <%= image_tag level_image(@player), class: 'level-img' %>
+          <small class="text-muted">Level <%= @player.level %></small>
+        </div>
+        <div class="username align-middle mr-0 mr-md-2">
           <h4><%= @player.username %></h4>
-        <% end %>
+          <span class="badge badge-<%= @player.platform %>"> <%= friendly_platform @player.platform %></span>
+        </div>
       </div>
-    </div>
+    <% end %>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#player_navbar" aria-controls="player_navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="player_navbar">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active"><a class="nav-link" href="#">Modes</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Weapons</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Divisions</a></li>
-      </ul>
+    <div class="collapse navbar-collapse position-relative" id="player_navbar">
+      <% stats.each do |stat, value| %>
+        <span class="navbar-text navbar-stat mr-4">
+          <%= stat %><br>
+          <h5><%= value %></h5>
+        </span>
+      <% end %>
+      <div class="player-updated d-none d-sm-block">
+        <small class="text-muted">
+          updated <%= time_ago_in_words @player.updated_at %> ago
+          <%= link_to '#' do %>
+            <i class="fas fa-sync ml-1"></i>
+          <% end %>
+        </small>
+      </div>
     </div>
   </div>
 </nav>
 
-<!--<div class="row">-->
+      <!--<div class="row">-->
 <!--  <div class="col-12">-->
 <!--    <div class="card mb-3">-->
 <!--      <div class="card-body p-0">-->

@@ -2,17 +2,21 @@
 <% weapon_type_sets = {'primary': %w[rifle submachine_gun light_machine_gun sniper_rifle shotgun], 'secondary': %w[pistol launcher melee], 'equipment': %w[tactical lethal] } %>
 
 <div class="row">
-  <div class="col-md-12">
+  <div  class="col-md-12 px-0 px-sm-3">
     <!-- Mode data -->
     <div class="mb-3">
-      <ul class="nav nav-tabs mb-2" role="tablist">
-        <li><h5 class="nav-text">Modes</h5></li>
-        <% data_sets.each_with_index do |data_set, index| %>
-          <li class="nav-item">
-            <a class="nav-link <%= index.zero? ? 'active' : '' %>" data-toggle="tab" data-index="<%= index %>" data-target="#<%= data_set %>" role="tab" aria-controls="<%= data_set %>" aria-selected="true"><%= data_set.humanize %></a>
-          </li>
-        <% end %>
-      </ul>
+      <div class="full-width">
+        <div class="nav nav-tabs mb-2" role="tablist">
+          <div class="container">
+            <div class="row">
+              <h5 class="nav-item nav-text">Modes</h5>
+              <% data_sets.each_with_index do |data_set, index| %>
+                <a class="nav-item nav-link <%= index.zero? ? 'active' : '' %>" data-toggle="tab" data-index="<%= index %>" data-target="#<%= data_set %>" role="tab" aria-controls="<%= data_set %>" aria-selected="true"><%= data_set.humanize %></a>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="tab-content">
         <% data_sets.each_with_index do |data_set, index| %>
           <% weekly = data_set == 'weekly' %>
@@ -23,7 +27,7 @@
                 <th>Mode</th>
                 <th>Wins</th>
                 <th>Losses</th>
-                <th>Win %</th>
+                <th>Win%</th>
                 <th>SPM</th>
                 <th>Kills</th>
                 <th>Deaths</th>
@@ -73,24 +77,29 @@
     </div>
     <!-- Weapon data -->
     <div class="mb-3">
-      <ul class="nav nav-tabs mb-2" role="tablist">
-        <li><h5 class="nav-text">Weapons</h5></li>
-        <li class="nav-item dropdown">
-          <% default_weapon_set =  weapon_type_sets.first[1].first %>
-          <a class="nav-select-toggle dropdown-toggle active" data-toggle="dropdown" data-target="#" role="button" aria-haspopup="true" aria-expanded="false"><%= default_weapon_set.humanize %>s</a>
-          <div class="dropdown-menu nav-select">
-            <% weapon_type_sets.each_with_index do |(weapon_class, weapon_types), i1| %>
-              <h6 class="dropdown-header"><%= weapon_class.to_s.humanize %></h6>
-              <% weapon_types.each_with_index do |weapon_type, i2| %>
-                <a class="dropdown-item nav-select-link <%= (i1 + i2).zero? ? 'active' : '' %>" data-toggle="tab" data-target="#<%= weapon_type %>" role="tab" aria-controls="<%= weapon_type %>" aria-selected="false"><%= weapon_type.humanize %>s</a>
-              <% end %>
-            <% end %>
+      <div class="full-width">
+        <div class="nav nav-tabs mb-2" role="tablist">
+          <div class="container">
+            <div class="row nav-select">
+              <h5 class="nav-item nav-text">Weapons</h5>
+              <% default_weapon_set =  weapon_type_sets.first[1].first %>
+              <a class="nav-item dropdown nav-select-toggle dropdown-toggle active" data-toggle="dropdown" data-target="#" role="button" aria-haspopup="true" aria-expanded="false"><%= default_weapon_set.humanize %>s</a>
+              <div class="dropdown-menu nav-select">
+                <% weapon_type_sets.each_with_index do |(weapon_class, weapon_types), i1| %>
+                  <h6 class="dropdown-header"><%= weapon_class.to_s.humanize %></h6>
+                  <% weapon_types.each_with_index do |weapon_type, i2| %>
+                    <a class="dropdown-item nav-select-link <%= (i1 + i2).zero? ? 'active' : '' %>" data-toggle="tab" data-target="#<%= weapon_type %>" role="tab" aria-controls="<%= weapon_type %>" aria-selected="false"><%= weapon_type.humanize %>s</a>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
       <div class="tab-content">
         <% weapon_type_sets.each_with_index do |(weapon_class, weapon_types), i1| %>
           <% weapon_types.each_with_index do |weapon_type_set, i2| %>
+            <% next unless @player.weapon_type_data(weapon_type_set) %>
             <div class="table-responsive tab-pane show <%= (i1 + i2).zero? ? 'active' : '' %>" id="<%= weapon_type_set %>" role="tabpanel" aria-labelledby="<%= weapon_type_set %>-tab">
               <table class="table ">
                 <thead>
@@ -149,9 +158,15 @@
     </div>
     <!-- Division data -->
     <div class="mb-3">
-      <ul class="nav nav-tabs mb-2" role="tablist">
-        <li><h5 class="nav-text">Divisions</h5></li>
-      </ul>
+      <div class="full-width">
+        <div class="nav nav-tabs mb-2" role="tablist">
+          <div class="container">
+            <div class="row">
+              <h5 class="nav-item nav-text">Divisions</h5>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="tab-content">
         <div class="tab-pane animated table-responsive show active" id="division_data" role="tabpanel" aria-labelledby="division_data-tab">
           <table class="table ">
@@ -184,5 +199,4 @@
     </div>
   </div>
 </div>
-<p>Best Weapon: <%= @player.best_weapon %></p>
-
+</div>
