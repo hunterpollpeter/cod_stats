@@ -1,4 +1,6 @@
+@import 'variables';
 @import 'bootstrap';
+@import 'bootswatch';
 @import "font-awesome-sprockets";
 @import 'font-awesome';
 @import 'animate';
@@ -10,9 +12,16 @@ body {
 
 nav {
   z-index: 1000;
+  padding: 0.5rem !important;
 
   &.navbar-player {
     z-index: 900;
+  }
+
+  input, select {
+    height: auto !important;
+    padding: 0.25rem 0 !important;
+    font-size: 0.8125rem !important;
   }
 }
 
@@ -29,6 +38,8 @@ nav {
 
 .tab-pane {
   animation-duration: .25s;
+  border: 1px solid #dee2e6;
+  @extend .rounded;
 
   thead > tr > th {
     border-top: none;
@@ -112,22 +123,18 @@ table.table-hover tr:hover {
 
 .nav-tabs {
   padding-top: 1rem;
-  border-top: 1px solid $nav-tabs-border-color;
+  border-bottom: 1px solid #dee2e6;
   @extend .bg-light;
-}
-
-.nav-tabs, .navbar-player, .alert-main {
-  @extend .inner-top-shadow;
-}
-
-
-.inner-top-shadow {
-  box-shadow: inset 0px 10px 10px -10px rgba(0,0,0,0.1);
 }
 
 .alert-main {
   border-radius: 0;
   margin-bottom: 0;
+  border: none;
+
+  .close {
+    font-size: 1rem;
+  }
 
   &.alert-success .container .row .col-12 {
     &:before {
@@ -155,7 +162,16 @@ table.table-hover tr:hover {
       margin-right: 0.25rem;
     }
   }
-
-
 }
 
+.bg-psn {
+  background-color: #003791;
+}
+
+.bg-xbl {
+  background-color: #107c10;
+}
+
+.light-white {
+  color: rgba(255,255,255,0.75);
+}

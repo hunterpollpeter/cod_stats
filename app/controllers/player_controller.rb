@@ -1,28 +1,42 @@
 class PlayerController < ApplicationController
   def show
-    @player, update_successful = Player.api_get player_params
-    render 'player/error', locals: { error: 'Player not found' } unless @player
+    @player, update_successful, update_message = Player.find_player_or_update(params[:platform], params[:username], 'wwii', params[:force_update])
+    unless @player
+      redirect_back(fallback_location: root_path, flash: { danger: "Player \"#{params[:username]}\" not found" }) and return
+    end
     if update_successful
-      flash[:success] = "Successfully updated #{@player.username}"
+      flash.now[:success] = update_message
     elsif !update_successful.nil? and !update_successful
-      flash[:danger] = 'Unable to update player.'
+      flash.now[:danger] = update_message
     end
   end
 
+  def search
+    params = player_params
+    redirect_to player_path(params[:platform], params[:username])
+  end
+
   def mode
-    @player = Player.api_get player_params
-    @mode = mode_params
+    @player = Player.find_player params[:platform], params[:username], 'wwii'
+    @mode = @player.mode mode_params
   end
 
   def weapon
-    @player = Player.api_get player_params
-    @weapon = weapon_params
+    @player = Player.find_player params[:platform], params[:username], 'wwii'
+    @weapon = @player.weapon weapon_params
+  end
+
+  def division
+    @player = Player.find_player params[:platform], params[:username], 'wwii'
+    @division = @player.division division_params
   end
 
   private
 
   def player_params
-    params.require :id
+    params.require :platform
+    params.require :username
+    params.permit :force_update, :platform, :username
   end
 
   def mode_params
@@ -31,6 +45,10 @@ class PlayerController < ApplicationController
 
   def weapon_params
     params.require :weapon
+  end
+
+  def division_params
+    params.require :division
   end
 end
 

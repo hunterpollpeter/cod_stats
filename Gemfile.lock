@@ -79,7 +79,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     crass (1.0.4)
-    debase (0.2.2)
+    debase (0.2.3.beta2)
       debase-ruby_core_source (>= 0.10.2)
     debase-ruby_core_source (0.10.3)
     domain_name (0.5.20180417)
@@ -232,7 +232,7 @@ DEPENDENCIES
   capybara (>= 2.15, < 4.0)
   chromedriver-helper
   coffee-rails (~> 4.2)
-  debase
+  debase (~> 0.2.3.beta2)
   font-awesome-sass
   http
   jbuilder (~> 2.5)

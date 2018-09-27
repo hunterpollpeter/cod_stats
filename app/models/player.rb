@@ -1,26 +1,28 @@
 class Player < ApplicationRecord
-  def self.api_find(platform, gamer_tag, title)
-    player = Player.find_by(username: gamer_tag, title: title, platform: platform)
-    return player if player
-    resp = JSON.parse(HTTP.get(api_url(platform, gamer_tag, title)))
-    return nil unless resp['status'] == 'success'
-    # use username from resp!!
-    player = Player.new(username: gamer_tag, platform: platform, title: title)
-    player.data = resp['data']
+  def self.api_get_data(platform, username, title)
+    JSON.parse(HTTP.get(Player.api_url(platform, username, title)))
+  end
+
+  def self.find_player_or_update(platform, username, title, force_update = false)
+    player = Player.find_by(platform: platform, username: username, title: title)
+    player_data = Player.api_get_data(platform, username, title) unless player and player.data and !force_update and !player.needs_update?
+    return player, nil unless player_data
+    return player, false, 'Failed to update player: Bad response' unless player_data['status'] == 'success'
+    return player, false, 'Failed to update player: Please wait to update again' if force_update and !player.allowed_update?
+    player = Player.new(platform: platform, username: player_data['data']['username'], title: title) unless player
+    player.data = player_data['data']
+    player.map_weapon_data
     player.save
+    return player, true, "#{player.username} successfully updated"
+  end
+
+  def self.find_player(platform, username, title)
+    player, _, _ = Player.find_player_or_update(platform, username, title, false)
     player
   end
 
-  def self.api_get(id)
-    player = Player.find_by(id: id)
-    return nil, nil unless player
-    return player, nil unless player.needs_update?
-    resp = JSON.parse(HTTP.get(api_url(player.platform, player.username, player.title)))
-    return player, false unless resp['status'] == 'success'
-    player.data = resp['data']
-    player.map_weapon_data
-    player.save
-    return player, true
+  def allowed_update?
+    Time.now >= (updated_at + 15.minutes)
   end
 
   def needs_update?
@@ -69,28 +71,40 @@ class Player < ApplicationRecord
     get_mode_data('losses', mode, weekly).to_i
   end
 
-  def best_weapon(weekly = false)
-    data = get_data 'allNonNumerical', weekly
+  def best_primary
+    data = get_data 'allNonNumerical', false
     return nil unless data
-    data['bestWeapon']['label']
+    data['bestPrimary']
   end
 
-  def best_primary(weekly = false)
-    data = get_data 'allNonNumerical', weekly
+  def best_secondary
+    data = get_data 'allNonNumerical', false
     return nil unless data
-    data['bestPrimary']['label']
+    data['bestSecondary']
+    end
+
+  def best_lethal
+    data = get_data 'allNonNumerical', false
+    return nil unless data
+    data['bestLethal']
+    end
+
+  def best_tactical
+    data = get_data 'allNonNumerical', false
+    return nil unless data
+    data['bestTactical']
   end
 
-  def best_secondary(weekly = false)
-    data = get_data 'allNonNumerical', weekly
+  def best_score_streak_attack
+    data = get_data 'allNonNumerical', false
     return nil unless data
-    data['best_secondary']['label']
-  end
+    data['bestScorestreakAttack']
+    end
 
-  def best_score_streak(weekly = false)
-    data = get_data 'allNonNumerical', weekly
+  def best_score_streak_support
+    data = get_data 'allNonNumerical', false
     return nil unless data
-    data['bestScorestreakAttack']['label']
+    data['bestScorestreakSupport']
   end
 
   def mode_score(mode = nil, weekly = false)
@@ -161,6 +175,18 @@ class Player < ApplicationRecord
       'division:expeditionary': 'Expeditionary' }
   end
 
+  def mode(mode_name)
+    mode_data[mode_name]
+  end
+
+  def mode_data
+    get_data('mode', false)
+  end
+
+  def division(division_name)
+    mode_data[division_name]
+  end
+
   def weapon(weapon_name)
     weapon_data[weapon_name]
   end
@@ -170,10 +196,10 @@ class Player < ApplicationRecord
   end
 
   def map_weapon_data
-    weapon_data&.each do |weapon_name, _|
-      weapon_type, weapon_class = Player.weapon_map weapon_name
-      weapon_data[weapon_name]['weapon_type'] = weapon_type
-      weapon_data[weapon_name]['weapon_class'] = weapon_class
+    weapon_data&.each do |weap_name, weap_data|
+      weapon_type, weapon_class = Player.weapon_map weap_data['label']
+      weapon_data[weap_name]['weapon_type'] = weapon_type
+      weapon_data[weap_name]['weapon_class'] = weapon_class
     end
   end
 
@@ -211,6 +237,14 @@ class Player < ApplicationRecord
     get_mode_data('accuracy', nil, false)
   end
 
+  def hits
+    get_mode_data('hits', nil, false)
+  end
+
+  def misses
+    get_mode_data('misses', nil, false)
+  end
+
   def last_played
     last_game = 0
     Player.modes.each do |mode, _|
@@ -218,6 +252,12 @@ class Player < ApplicationRecord
       last_game = mode_last_game if last_game < mode_last_game
     end
     last_game
+  end
+
+  def platform_long
+    return 'playstation'  if platform == 'psn'
+    return 'xbox'         if platform == 'xbl'
+    return 'steam'        if platform == 'steam'
   end
 
   private
@@ -250,8 +290,8 @@ class Player < ApplicationRecord
     data[data_name]
   end
 
-  def self.api_url(platform, gamer_tag, title)
-    "https://my.callofduty.com/api/papi-client/crm/cod/v2/title/#{title}/platform/#{platform}/gamer/#{gamer_tag}/profile/"
+  def self.api_url(platform, username, title)
+    "https://my.callofduty.com/api/papi-client/crm/cod/v2/title/#{title}/platform/#{platform}/gamer/#{username}/profile/"
   end
 
   def self.weapon_map(weapon)

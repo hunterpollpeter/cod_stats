@@ -21,69 +21,8 @@
 }
 
 .navbar-player {
-
   h4, h5 {
     margin: 0;
-  }
-
-  .navbar-stat {
-    h5 {
-      color: $black;
-    }
-  }
-
-  vertical-align: top;
-  .level {
-    display: inline-block;
-    img.level-img {
-      display: block;
-      max-height: 40px;
-      margin: 0 auto;
-    }
-  }
-
-  .username {
-    display: inline-block;
-    .badge {
-      display: inline-block !important;
-      color: white;
-      &:before {
-        font-family: "Font Awesome 5 Brands";
-      }
-
-      &.badge-psn {
-        background-color: #003791;
-        &:before {
-          content: '\f3df';
-        }
-      }
-      &.badge-xbl {
-        background-color: #107c10;
-        &:before {
-          content: '\f412';
-        }
-      }
-      &.badge-steam {
-        background-color: #171A21;
-        &:before {
-          content: '\f1b6';
-        }
-      }
-    }
-  }
-
-  &.info {
-    >ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      >li {
-        display: inline-block;
-        padding: 0 1rem;
-        margin-right: 1.5rem;
-        border-radius: .25rem
-      }
-    }
   }
 }
 

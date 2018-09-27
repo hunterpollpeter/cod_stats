@@ -14,9 +14,16 @@
           <a class="nav-link" href="#">Leaderboard</a>
         </li>
       </ul>
-      <%= form_tag search_path, :method => :get, class: 'form-inline my-2 my-lg-0' do %>
-        <%= text_field_tag :search, nil, class: 'form-control mr-sm-2', placeholder: 'Player search' %>
-        <%= submit_tag 'Player Search', class: 'btn btn-outline-primary my-2 my-sm-0' %>
+      <%= form_tag player_search_path, :method => :get, class: 'form-inline my-2 my-lg-0' do %>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <%= select_tag(:platform, options_for_select([['psn', 'psn'],['xbl', 'xbl'],['steam','steam']]), class: 'form-control mr-2 pr-3') %>
+          </div>
+          <%= text_field_tag :username, nil, class: 'form-control', placeholder: 'Player search', id: 'search' %>
+          <div class="input-group-append">
+            <i class="fas fa-search"></i>
+          </div>
+        </div>
       <% end %>
     </div>
   </div>

@@ -1,0 +1,81 @@
+<% weapon_type_sets = {'primary': %w[rifle submachine_gun light_machine_gun sniper_rifle shotgun], 'secondary': %w[pistol launcher melee], 'equipment': %w[tactical lethal] } %>
+<div class="mb-3">
+  <div class="full-width">
+    <div class="nav nav-tabs mb-4" role="tablist">
+      <div class="container">
+        <div class="row nav-select">
+          <h5 class="nav-item nav-text">Weapons</h5>
+          <% default_weapon_set =  weapon_type_sets.first[1].first %>
+          <a class="nav-item dropdown nav-link nav-select-toggle dropdown-toggle active" data-toggle="dropdown" data-target="#" role="button" aria-haspopup="true" aria-expanded="false"><%= default_weapon_set.humanize %>s</a>
+          <div class="dropdown-menu nav-select">
+            <% weapon_type_sets.each_with_index do |(weapon_class, weapon_types), i1| %>
+              <h6 class="dropdown-header"><%= weapon_class.to_s.humanize %></h6>
+              <% weapon_types.each_with_index do |weapon_type, i2| %>
+                <a class="dropdown-item nav-select-link <%= (i1 + i2).zero? ? 'active' : '' %>" data-toggle="tab" data-target="#<%= weapon_type %>" role="tab" aria-controls="<%= weapon_type %>" aria-selected="false"><%= weapon_type.humanize %>s</a>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content">
+    <% weapon_type_sets.each_with_index do |(weapon_class, weapon_types), i1| %>
+      <% weapon_types.each_with_index do |weapon_type_set, i2| %>
+        <% next unless @player.weapon_type_data(weapon_type_set) %>
+        <div class="table-responsive tab-pane show <%= (i1 + i2).zero? ? 'active' : '' %>" id="<%= weapon_type_set %>" role="tabpanel" aria-labelledby="<%= weapon_type_set %>-tab">
+          <table class="table mb-0">
+            <thead>
+            <tr>
+              <th>Weapon</th>
+              <th>Kills</th>
+              <th>Deaths</th>
+              <th>Multikills</th>
+              <th>KPM</th>
+              <th>DPM</th>
+              <th>Accuracy</th>
+              <th>Ratio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% type_kills =  @player.weapon_type_data(weapon_type_set)[:kills].to_i %>
+            <% type_deaths =  @player.weapon_type_data(weapon_type_set)[:deaths].to_i %>
+            <% type_time_in_use =  @player.weapon_type_data(weapon_type_set)[:time_in_use].to_i %>
+            <% type_kpm = stat_per_minute(type_kills, type_time_in_use) %>
+            <% type_dpm = stat_per_minute(type_deaths, type_time_in_use) %>
+            <% type_acc = weapon_accuracy(@player.weapon_type_data(weapon_type_set)[:hits], @player.weapon_type_data(weapon_type_set)[:shots]) %>
+            <% type_kd = weapon_kd_ratio(type_kills, type_deaths) %>
+            <% @player.weapon_data&.select{|_, weapon_data| weapon_data['weapon_type'] == weapon_type_set }&.each do |weapon_name, weapon_data| %>
+              <% next if weapon_data['shots'].zero? %>
+              <% acc = weapon_accuracy(weapon_data['hits'], weapon_data['shots'])%>
+              <% kd = weapon_kd_ratio(weapon_data['kills'], weapon_data['deaths'])%>
+              <% kpm = stat_per_minute(weapon_data['kills'], weapon_data['timeInUse']) %>
+              <% dpm = stat_per_minute(weapon_data['deaths'], weapon_data['timeInUse']) %>
+              <tr>
+                <td><%= link_to weapon_data['label'], player_weapon_path(weapon: weapon_name) %></td>
+                <td><%= weapon_data['kills'].to_i %></td>
+                <td><%= weapon_data['deaths'].to_i %></td>
+                <td><%= weapon_data['multikills'].to_i %></td>
+                <td class="table-<%= stat_class(kpm, type_kpm) %>"><%= number_with_precision(kpm, precision: 3) %></td>
+                <td class="table-<%= stat_class(type_dpm, dpm) %>"><%= number_with_precision(dpm, precision: 3) %></td>
+                <td class="table-<%= stat_class(acc, type_acc) %>"><%= number_with_precision(acc, precision: 1) %></td>
+                <td class="table-<%= stat_class(kd, type_kd) %>"><%= number_with_precision(kd, precision: 3) %></td>
+              </tr>
+            <% end %>
+            <tr>
+              <th>Overall</th>
+              <th><%= type_kills %></th>
+              <th><%= type_deaths %></th>
+              <th><%= @player.weapon_type_data(weapon_type_set)[:multikills].to_i %></th>
+              <th><%= number_with_precision(type_kpm, precision: 3) %></th>
+              <th><%= number_with_precision(type_dpm, precision: 3) %></th>
+              <th><%= number_with_precision(type_acc, precision: 1) %></th>
+              <th><%= number_with_precision(type_kd, precision: 3) %></th>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<% data_sets = %w[lifetime weekly] %>
+
+<div class="mb-3">
+  <%= render partial: 'shared/tabs', locals: {data_sets: data_sets} %>
+  <div class="tab-content">
+    <% data_sets.each_with_index do |data_set, index| %>
+      <% weekly = data_set == 'weekly' %>
+      <div class="tab-pane animated table-responsive show <%= index.zero? ? 'active' : '' %>" id="<%= data_set %>" role="tabpanel" aria-labelledby="<%= data_set %>-tab">
+        <table class="table mb-0">
+          <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Win%</th>
+            <th>SPM</th>
+            <th>Kills</th>
+            <th>Deaths</th>
+            <th>Ratio</th>
+            <th>Score</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% Player.modes.each do |mode, name| %>
+            <% ms = @player.mode_score mode, weekly %>
+            <% next unless ms  %>
+            <% wp = @player.win_percentage mode, weekly %>
+            <% spm = @player.score_per_minute mode, weekly %>
+            <% kd = @player.kd_ratio mode, weekly %>
+            <tr>
+              <td><%= link_to name, player_mode_path(mode: mode) %></td>
+              <td><%= @player.wins mode, weekly %></td>
+              <td><%= @player.losses mode, weekly %></td>
+              <td class="<%= stat_direction(wp, @player.win_percentage(mode)) %> table-<%= stat_class(wp, 0.5, 0.75) %>"><%= number_with_precision(percentage(wp), precision: 1) %></td>
+              <td class="<%= stat_direction(spm, @player.score_per_minute(mode)) %> table-<%= stat_class(spm, @player.score_per_minute(nil, weekly)) %>"><%= number_with_precision(spm, precision: 1) %></td>
+              <td><%= @player.kills mode, weekly %></td>
+              <td><%= @player.deaths mode, weekly %></td>
+              <td class="<%= stat_direction(kd, @player.kd_ratio(mode)) %> table-<%= stat_class(kd, @player.kd_ratio(nil, weekly)) %>"><%= number_with_precision(kd, precision: 3) %></td>
+              <td class="<%= stat_direction(ms, @player.mode_score(mode)) %> table-<%= stat_class(ms, @player.mode_score(nil, weekly)) %>"><%= ms %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <% wp = @player.win_percentage nil, weekly %>
+            <% spm = @player.score_per_minute nil, weekly %>
+            <% kd = @player.kd_ratio nil, weekly %>
+            <% ms = @player.mode_score nil, weekly %>
+            <th>Overall</th>
+            <th><%= @player.wins nil, weekly%></th>
+            <th><%= @player.losses nil, weekly %></th>
+            <th class="<%= stat_direction(wp, @player.win_percentage) %>"><%= number_with_precision(percentage(wp), precision: 1) %></th>
+            <th class="<%= stat_direction(spm, @player.score_per_minute) %>"><%= number_with_precision(spm, precision: 1) %></th>
+            <th><%= @player.kills nil, weekly %></th>
+            <th><%= @player.deaths nil, weekly %></th>
+            <th class="<%= stat_direction(kd, @player.kd_ratio) %>"><%= number_with_precision(kd, precision: 3) %></th>
+            <th class="<%= stat_direction(ms, @player.mode_score) %>"><%= ms %></th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+</div>

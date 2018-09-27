@@ -1,0 +1,152 @@
+<div class="py-4">
+  <div class="row">
+    <div class="col-12 col-md-3">
+      <div class="text-center">
+        <%= image_tag level_image(@player), style: 'max-height: 150px;' %>
+        <h4 class="text-muted m-0">Level <%= @player.level %></h4>
+      </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <canvas id="kdChart"></canvas>
+    </div>
+    <div class="col-12 col-md-3">
+      <canvas id="wpChart"></canvas>
+    </div>
+    <div class="col-12 col-md-3">
+      <canvas id="accChart"></canvas>
+    </div>
+  </div>
+  <script>
+    Chart.defaults.doughnut.maintainAspectRatio = false;
+    Chart.defaults.doughnut.cutoutPercentage = 75;
+    Chart.defaults.doughnut.legend.display = false;
+    Chart.defaults.doughnut.tooltips.enabled = false;
+    Chart.defaults.doughnut.hover.mode = null;
+    Chart.defaults.doughnut.plugins = {
+        datalabels: {
+            color: '#FFFFFF',
+                backgroundColor: ['#00FF00', '#FF0000'],
+                borderRadius: 4,
+                padding: 5,
+                borderWidth: 2,
+                borderColor: '#FFFFFF',
+                font: {
+                weight: 'bolder',
+                clip: false
+            }
+        }
+    };
+
+
+    var kdChart_ctx = document.getElementById("kdChart").getContext('2d');
+    var kdChart = new Chart(kdChart_ctx,{
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [<%= @player.kills %>, <%= @player.deaths %>],
+                backgroundColor: ['#00FF00', '#FF0000']
+            }]
+        },
+        options: {
+            plugins: {
+                doughnutlabel: {
+                    labels: [{
+                        text: 'K/D Ratio',
+                        font: {
+                            size: 30,
+                            color: 'grey'
+                        }
+                    },
+                    {
+                        text: <%= @player.kd_ratio %>,
+                        font: {
+                            size: 100
+                        },
+                    }]
+                }
+            }
+        }
+    });
+
+    var wpChart_ctx = document.getElementById("wpChart").getContext('2d');
+    var wpChart = new Chart(wpChart_ctx,{
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [<%= @player.wins %>, <%= @player.losses %>],
+                backgroundColor: ['#00FF00', '#FF0000']
+            }]
+        },
+        options: {
+            plugins: {
+                doughnutlabel: {
+                    labels: [{
+                        text: 'Win %',
+                        font: {
+                            size: 30,
+                            color: 'grey'
+                        }
+                    },
+                    {
+                        text: '<%= number_with_precision(percentage(@player.win_percentage), precision: 1) %>',
+                        font: {
+                            size: 110
+                        },
+                    }]
+                }
+            }
+        }
+    });
+
+    var accChart_ctx = document.getElementById("accChart").getContext('2d');
+    var accChart = new Chart(accChart_ctx,{
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [<%= @player.hits %>, <%= @player.misses %>],
+                backgroundColor: ['#00FF00', '#FF0000']
+            }]
+        },
+        options: {
+            plugins: {
+                doughnutlabel: {
+                    labels: [{
+                        text: 'Accuracy',
+                        font: {
+                            size: 30,
+                            color: 'grey'
+                        }
+                    },
+                    {
+                        text: '<%= @player.accuracy %>',
+                        font: {
+                            size: 110
+                        },
+                    }]
+                }
+            }
+        }
+    });
+  </script>
+<!--  <strong>Prestige</strong> <%#= @player.prestige %><br>-->
+<!--  <strong>Level</strong> <%#= @player.level %><br>-->
+<!--  <strong>Kills</strong> <%#= @player.kills %><br>-->
+<!--  <strong>Deaths</strong> <%#= @player.deaths %><br>-->
+<!--  <strong>K/D</strong> <%#= @player.kd_ratio %><br>-->
+<!--  <strong>Accuracy</strong> <%#= @player.accuracy %><br>-->
+<!--  <strong>Wins</strong> <%#= @player.wins %><br>-->
+<!--  <strong>Losses</strong> <%#= @player.losses %><br>-->
+<!--  <strong>Win %</strong> <%#= number_with_precision(percentage(@player.win_percentage), precision: 1) %><br>-->
+
+<!--  <strong>Time Played</strong> <%#= @player.time_played %><br>-->
+<!--  <strong>Score</strong> <%#= @player.score %><br>-->
+<!--  <strong>SPM</strong> <%#= number_with_precision @player.score_per_minute, precision: 1 %><br>-->
+<!--  <strong>KPM</strong> <%#= number_with_precision @player.kills_per_minute, precision: 2 %><br>-->
+<!--  <strong>DPM</strong> <%#= number_with_precision @player.deaths_per_minute, precision: 2 %><br>-->
+<!--  <strong>Best Primary</strong> <%#= link_to @player.best_primary['label'], player_weapon_path(weapon: @player.best_primary['name']) %><br>-->
+<!--  <strong>Best Secondary</strong> <%#= link_to @player.best_secondary['label'], player_weapon_path(weapon: @player.best_secondary['name']) %><br>-->
+<!--  <strong>Best Lethal</strong> <%#= link_to @player.best_lethal['label'], player_weapon_path(weapon: @player.best_lethal['name']) %><br>-->
+<!--  <strong>Best Tactical</strong> <%#= link_to @player.best_tactical['label'], player_weapon_path(weapon: @player.best_tactical['name']) %><br>-->
+<!--  <strong>Best Score Streak (Attack)</strong> <%#= link_to @player.best_score_streak_attack['label'], player_weapon_path(weapon: @player.best_score_streak_attack['name']) %><br>-->
+<!--  <strong>Best Score Streak (Support)</strong> <%#= link_to @player.best_score_streak_support['label'], player_weapon_path(weapon: @player.best_score_streak_support['name']) %><br>-->
+</div>

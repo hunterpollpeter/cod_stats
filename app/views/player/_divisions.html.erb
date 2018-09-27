@@ -1,0 +1,41 @@
+<div class="mb-3">
+  <div class="full-width">
+    <div class="nav nav-tabs mb-4" role="tablist">
+      <div class="container">
+        <div class="row">
+          <h5 class="nav-item nav-text">Divisions</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane animated table-responsive show active" id="division_data" role="tabpanel" aria-labelledby="division_data-tab">
+      <table class="table mb-0">
+        <thead>
+        <tr>
+          <th>Division</th>
+          <th>Kills</th>
+          <th>Deaths</th>
+          <th>KPM</th>
+          <th>DPM</th>
+          <th>Ratio</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% Player.divisions.each do |division, name| %>
+          <% kd = @player.kd_ratio(division) %>
+          <% next unless kd %>
+          <tr>
+            <td><%= link_to name, player_division_path(division: division) %></td>
+            <td><%= @player.kills division %></td>
+            <td><%= @player.deaths division %></td>
+            <td><%= number_with_precision(@player.kills_per_minute(division), precision: 1) %></td>
+            <td><%= number_with_precision(@player.deaths_per_minute(division), precision: 1) %></td>
+            <td class="table-<%= stat_class(kd, @player.kd_ratio(nil)) %>"><%= number_with_precision(kd, precision: 3) %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="full-width">
+  <div class="nav nav-tabs mb-4" role="tablist">
+    <div class="container">
+      <div class="row">
+        <h5 class="nav-item nav-text">Modes</h5>
+        <% data_sets.each_with_index do |data_set, index| %>
+          <a class="nav-item nav-link <%= index.zero? ? 'active' : '' %>" data-toggle="tab" data-index="<%= index %>" data-target="#<%= data_set %>" role="tab" aria-controls="<%= data_set %>" aria-selected="true"><%= data_set.humanize %></a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
